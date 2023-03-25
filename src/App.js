@@ -1,25 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      async function getUserData(userId) {
+  try {
+    //Axios çağrıları yapıldı Try-Catch Bloğuna sarıldı.
+    const [userData, posts] = await Promise.all([
+      axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`),
+      axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+    ]);
+    return {
+      ...userData.data,
+      posts: posts.data
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
+//yazılan axios fonksiyonu console.log'da görüntülenmesi için çağrıldı.
+console.log(getUserData(1))
 }
 
 export default App;
